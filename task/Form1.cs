@@ -21,9 +21,7 @@ namespace task
 
 		private void AnalyzeText()
 		{
-			listBoxLexicalErrors.Items.Clear();
-			listBoxSyntacticErrors.Items.Clear();
-			listBoxSemanticErrors.Items.Clear();
+			listBox1.Items.Clear();
 			textBox3.Clear();
 			listView1.Items.Clear();
 
@@ -32,11 +30,6 @@ namespace task
 
 			List<(ErrorType Type, string Message)> lexicalErrors;
 			List<Token> tokens = LexAn.InterpString(text, out lexicalErrors);
-
-			foreach (var error in lexicalErrors)
-			{
-				listBoxLexicalErrors.Items.Add(error.Message);
-			}
 
 			int j = 0;
 			foreach (var token in tokens)
@@ -52,23 +45,35 @@ namespace task
 			SyntLLParser parser = new SyntLLParser(tokens, out analysisErrors);
 			ErrorCode result = parser.Parse();
 
-			foreach (var error in analysisErrors)
-			{
-				if (error.Type == ErrorType.Syntactic)
-				{
-					listBoxSyntacticErrors.Items.Add(error.Message);
-				}
-				else if (error.Type == ErrorType.Semantic)
-				{
-					listBoxSemanticErrors.Items.Add(error.Message);
-				}
-			}
-
 			List<RussBlock> russianCode = parser.GetRussianCodeMatrix();
 			foreach (RussBlock block in russianCode)
 			{
 				textBox3.AppendText(block.ToRussianString() + Environment.NewLine);
 			}
+
+			if (lexicalErrors.Count == 0 && analysisErrors.Count == 0)
+			{
+				listBox1.Items.Add("Ошибки отсутствуют. Трансляция завершилась успешно.");
+			}
+			else
+			{
+                foreach (var error in lexicalErrors)
+                {
+                    listBox1.Items.Add("Лексическая " + error.Message);
+                }
+
+                foreach (var error in analysisErrors)
+                {
+                    if (error.Type == ErrorType.Syntactic)
+                    {
+                        listBox1.Items.Add("Синтаксическая " + error.Message);
+                    }
+                    else if (error.Type == ErrorType.Semantic)
+                    {
+                        listBox1.Items.Add("Семантическая " + error.Message);
+                    }
+                }
+            }
 		}
 
 		private void button1_Click(object sender, EventArgs e)

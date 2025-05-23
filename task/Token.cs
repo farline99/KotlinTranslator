@@ -101,7 +101,7 @@ namespace task
                             }
                             else
                             {
-                                LexicalErrors.Add((ErrorType.Lexical, $"Неизвестный символ '{c}'"));
+                                LexicalErrors.Add((ErrorType.Lexical, $"ошибка: Неизвестный символ '{c}'"));
                             }
 
                             break;
@@ -113,6 +113,12 @@ namespace task
                             }
                             else
                             {
+                                if (buffer.Length > 8)
+                                {
+                                    buffer = buffer.Substring(0, 8);
+                                    LexicalErrors.Add((ErrorType.Lexical, $"ошибка: Идентификатор '{buffer}' был усечен до '{buffer}'"));
+                                }
+
                                 if (Terminals.Contains(buffer))
                                 {
                                     Tokens.Add(new Token('T', buffer, Array.IndexOf(Terminals, buffer)));
@@ -180,7 +186,7 @@ namespace task
                                 }
                                 else
                                 {
-                                    LexicalErrors.Add((ErrorType.Lexical, $"Неверный Char литерал: {buffer}"));
+                                    LexicalErrors.Add((ErrorType.Lexical, $"ошибка: Неверный Char литерал: {buffer}"));
                                 }
 
                                 buffer = "";
@@ -194,7 +200,7 @@ namespace task
                                 }
                                 else
                                 {
-                                    LexicalErrors.Add((ErrorType.Lexical, $"Символьный литерал слишком длинный или незавершённый," +
+                                    LexicalErrors.Add((ErrorType.Lexical, $"ошибка: Символьный литерал слишком длинный или незавершённый," +
                                                                           $"начинается с {buffer}"));
 
                                     if (!Literals.Contains(buffer))

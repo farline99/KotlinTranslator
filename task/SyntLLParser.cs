@@ -202,7 +202,7 @@ namespace task
         private void Error(ErrorCode code, int tokenIndex, params string[] details)
         {
             var type = Classify(code);
-            string baseMessage = $"Ошибка в токене №{tokenIndex}: {code}";
+            string baseMessage = $"ошибка в токене №{tokenIndex}: {code}";
             string detailMessage = "";
 
             switch (code)
