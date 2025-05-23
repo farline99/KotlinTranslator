@@ -115,10 +115,10 @@ namespace task
                             {
                                 if (buffer.Length > 8)
                                 {
+                                    string id_before = buffer;
                                     buffer = buffer.Substring(0, 8);
-                                    LexicalErrors.Add((ErrorType.Lexical, $"ошибка: Идентификатор '{buffer}' был усечен до '{buffer}'"));
+                                    LexicalErrors.Add((ErrorType.Lexical, $"ошибка: Идентификатор '{id_before}' был усечен до '{buffer}'"));
                                 }
-
                                 if (Terminals.Contains(buffer))
                                 {
                                     Tokens.Add(new Token('T', buffer, Array.IndexOf(Terminals, buffer)));
